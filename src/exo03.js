@@ -4,7 +4,7 @@ import { objectExpression } from "@babel/types";
 // { a: "b" } => { b: "a" }
 
 export function invertKeysAndValues(obj) {
-  let reversed = {};
+  var reversed = {};
   for (let key in obj) {
     reversed[obj[key]] = key;
   }
