@@ -14,12 +14,14 @@ export const user = {
   }
 };
 
+// 1) avec Object.setPrototypeOf
+Object.setPrototypeOf(user, person);
+
+// 2) avec Object.create et avec Object.assign
 // TODO: assigner user comme prototype
-export const bob = {
+export const bob = Object.create(user);
+Object.assign(bob, {
   name: "Afett",
   first: "Bob",
   rights: ["create", "read"]
-};
-
-// 1) avec Object.setPrototypeOf
-// 2) avec Object.create et avec Object.assign
+});

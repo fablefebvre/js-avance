@@ -1,18 +1,24 @@
 export function Observable(action) {
   this.observers = [];
   action({
-    emit: (value) => {
+    emit: value => {
       //TODO: notifier les observateurs de la valeur émise
+      this.observers.forEach(o => o.onValue(value));
     },
     complete: () => {
       //TODO: notifier les observateurs de la complétion
+      this.observers.forEach(o => o.onComplete());
     }
-  })
+  });
 }
 
 Observable.prototype.subscribe = function(observer) {
   //TODO: enregistrer l'observateur
-  return observer
+  this.observers.push(observer);
+  observer.unsubscribe = () => {
+    this.observers = this.observers.filter(o => o !== observer);
+  };
+  return observer;
 };
 
 /* exemple d'usage: */
