@@ -7,16 +7,17 @@ PubSub.prototype.on = function(event, callback) {
   if (!this.events.has(event)) {
     this.events.set(event, []);
   }
-  if (event === "*") {
-    this.events.values(e => e.push(callback));
-  } else {
-    this.events.get(event).push(callback);
-  }
+  this.events.get(event).push(callback);
 };
 
 PubSub.prototype.emit = function(event, data) {
   // TODO: appeler les callbacks enregistrés pour l'événement `event`
-  this.events.get(event).map(callback => callback(data));
+  if (this.events.has(event)) {
+    this.events.get(event).forEach(callback => callback(data));
+  }
+  if (this.events.has("*")) {
+    this.events.get("*").forEach(callback => callback(data));
+  }
 };
 
 PubSub.prototype.off = function(event, callback) {
