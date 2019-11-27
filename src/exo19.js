@@ -2,7 +2,11 @@ export const addAliasForProperties = (object, alias) => {
   // TODO: retourner un Proxy pour l'objet permettant
   // de déclarer des alias pour accéder en lecture ou écriture
   // à une propriété de l'objet
-  return object;
+  return new Proxy(object, {
+    get(obj, prop) {
+      return obj[prop] ? obj[prop] : obj[alias[prop]];
+    }
+  });
 };
 
 // exemple d'utilisation:
@@ -16,7 +20,16 @@ export const countFunctionCalls = fn => {
   // TODO: retourner un Proxy pour la fonction permettant
   // de compter le nombre d'appels faits pour cette fonction,
   // stocké dans la propriété fn.count
-  return fn;
+  let count = 0;
+  return new Proxy(fn, {
+    apply(o, context, args) {
+      count++;
+      return Reflect.apply(o, context, args);
+    },
+    get(obj, prop) {
+      return prop === "count" ? count : Reflect.get(obj, prop);
+    }
+  });
 };
 
 // exemple d'utilisation:
